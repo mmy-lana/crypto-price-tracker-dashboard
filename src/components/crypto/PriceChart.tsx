@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useMemo } from 'react';
 
 interface PriceChartProps {
   prices: [number, number][];
@@ -6,9 +6,42 @@ interface PriceChartProps {
   onDaysChange: (days: number) => void;
 }
 
+const width = 600;
+const height = 280;
+const paddingX = 10;
+const paddingY = 20;
+
 export default function PriceChart({ prices, days, onDaysChange }: PriceChartProps) {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const svgRef = useRef<SVGSVGElement | null>(null);
+
+  // FIX: Destructure only the variables that are actually used downstream
+  const { points, pathString, fillPathString, values } = useMemo(() => {
+    if (!prices || prices.length === 0) {
+      return { points: [], pathString: '', fillPathString: '', values: [] };
+    }
+
+    const priceValues = prices.map(p => p[1]);
+    const min = Math.min(...priceValues);
+    const max = Math.max(...priceValues);
+    const range = max - min || 1;
+
+    const mappedPoints = prices.map((item, index) => {
+      const x = paddingX + (index / (prices.length - 1)) * (width - paddingX * 2);
+      const y = height - paddingY - ((item[1] - min) / range) * (height - paddingY * 2);
+      return { x, y, time: item[0], price: item[1] };
+    });
+
+    const path = mappedPoints.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`).join(' ');
+    const fillPath = `${path} L ${mappedPoints[mappedPoints.length - 1].x} ${height - paddingY} L ${mappedPoints[0].x} ${height - paddingY} Z`;
+
+    return {
+      points: mappedPoints,
+      pathString: path,
+      fillPathString: fillPath,
+      values: priceValues
+    };
+  }, [prices]); // Standardized dependency array
 
   if (!prices || prices.length === 0) {
     return (
@@ -17,29 +50,6 @@ export default function PriceChart({ prices, days, onDaysChange }: PriceChartPro
       </div>
     );
   }
-
-  const values = prices.map(p => p[1]);
-  const minVal = Math.min(...values);
-  const maxVal = Math.max(...values);
-  const valRange = maxVal - minVal || 1;
-
-  // Render variables
-  const width = 600;
-  const height = 280;
-  const paddingX = 10;
-  const paddingY = 20;
-
-  // Map array points to coordinate vectors
-  const points = prices.map((item, index) => {
-    const x = paddingX + (index / (prices.length - 1)) * (width - paddingX * 2);
-    const y = height - paddingY - ((item[1] - minVal) / valRange) * (height - paddingY * 2);
-    return { x, y, time: item[0], price: item[1] };
-  });
-
-  const pathString = points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`).join(' ');
-
-  // SVG Area Fill Coordinates
-  const fillPathString = `${pathString} L ${points[points.length - 1].x} ${height - paddingY} L ${points[0].x} ${height - paddingY} Z`;
 
   // Process mouse alignment coordinate tracking
   const handleMouseMove = (e: React.MouseEvent<SVGSVGElement, MouseEvent>) => {

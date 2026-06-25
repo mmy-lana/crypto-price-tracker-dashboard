@@ -1,5 +1,6 @@
 import React from 'react';
-import { useApp, type ActiveTab } from '../../context/AppProvider';
+import type { ActiveTab } from '../../context/AppContext';
+import { useApp } from '../../hooks/useApps';
 
 interface NavItem {
   id: ActiveTab;

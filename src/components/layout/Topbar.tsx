@@ -1,5 +1,5 @@
 import React from 'react';
-import { useApp } from '../../context/AppProvider';
+import { useApp } from '../../hooks/useApps';
 
 export default function Topbar() {
   const { sidebarOpen, setSidebarOpen, activeTab, apiStatus } = useApp();

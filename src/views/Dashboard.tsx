@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useApp } from '../context/AppProvider';
+import { useApp } from '../hooks/useApps';
 import { useMarketData } from '../hooks/useCoinGecko';
 import { coingeckoService } from '../services/coingecko';
 import { type CoinMarketData } from '../utils/mockData';

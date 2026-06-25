@@ -1,5 +1,5 @@
 import React from 'react';
-import { useApp } from '../../context/AppProvider';
+import { useApp } from '../../hooks/useApps';
 import type { CoinMarketData } from '../../utils/mockData';
 import Sparkline from './Sparkline';
 

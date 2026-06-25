@@ -1,7 +1,7 @@
 import React from 'react';
 import Sidebar from './Sidebar';
 import Topbar from './Topbar';
-import { useApp } from '../../context/AppProvider';
+import { useApp } from '../../hooks/useApps';
 import Dashboard from '../../views/Dashboard';
 import CoinDetail from '../../views/CoinDetail';
 import Portfolio from '../../views/Portfolio';

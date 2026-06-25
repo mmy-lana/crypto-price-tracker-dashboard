@@ -1,7 +1,17 @@
 import React, { useState } from 'react';
-import { useApp } from '../context/AppProvider';
+import { useApp } from '../hooks/useApps';
 import { useCoinDetail, useCoinChart } from '../hooks/useCoinGecko';
 import PriceChart from '../components/crypto/PriceChart';
+
+function extractSafeDescriptionText(htmlString: string): string {
+  if (!htmlString) return 'No description log stored for this asset.';
+  // Strips tags cleanly and decodes basic entities safely
+  return htmlString
+    .replace(/<[^>]*>?/gm, '')
+    .replace(/&quot;/g, '"')
+    .replace(/&amp;/g, '&')
+    .replace(/&#39;/g, "'");
+}
 
 export default function CoinDetail() {
   const { activeCoinId, setActiveTab, watchlist, toggleWatchlist } = useApp();
@@ -90,10 +100,9 @@ export default function CoinDetail() {
           {/* Description Container */}
           <div className="rounded-xl border border-cyan-400/20 bg-gray-900/40 p-6 backdrop-blur">
             <h3 className="font-mono text-xs text-gray-500 uppercase tracking-widest">// ARCHIVE_DESCRIPTION:</h3>
-            <div 
-              className="mt-4 font-mono text-xs text-gray-400 leading-relaxed max-h-40 overflow-y-auto pr-2 scrollbar-thin"
-              dangerouslySetInnerHTML={{ __html: coin.description.en || 'No description log stored for this asset.' }}
-            />
+            <p className="mt-4 font-mono text-xs text-gray-400 leading-relaxed max-h-40 overflow-y-auto pr-2 scrollbar-thin whitespace-pre-line">
+              {extractSafeDescriptionText(coin.description.en)}
+            </p>
           </div>
         </div>
 
