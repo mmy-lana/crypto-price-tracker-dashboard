@@ -1,11 +1,10 @@
 import { type CoinMarketData, type CoinDetailData, MOCK_MARKETS, MOCK_DETAILS } from '../utils/mockData';
 
 // Vite exposes env configurations inside import.meta.env
-const BASE_URL = import.meta.env.VITE_BASE_URL;
-const API_KEY = import.meta.env.VITE_API_KEY;
+const BASE_URL = '/api';
+// const API_KEY = import.meta.env.VITE_API_KEY;
 
 const headers = {
-  "x-cg-demo-api-key": API_KEY,
   "Accept": "application/json"
 };
 
