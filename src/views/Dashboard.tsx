@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState, type SyntheticEvent } from 'react';
 import { useApp } from '../hooks/useApps';
 import { useMarketData } from '../hooks/useCoinGecko';
 import { coingeckoService } from '../services/coingecko';
@@ -22,7 +22,7 @@ export default function Dashboard() {
     setActiveTab('coin-detail');
   };
 
-  const handleSearchSubmit = async (e: React.FormEvent) => {
+const handleSearchSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
     const query = searchInput.trim();
 
@@ -45,13 +45,13 @@ export default function Dashboard() {
         return;
       }
 
-      // 2. Extract top matching coin IDs (capped to prevent 429 rate limit triggers)
-      const idsToFetch = matchedCoins.slice(0, 12).map((coin: any) => coin.id);
+      // 2. FIX: Remove explicit 'any' - TypeScript automatically infers that 'coin' is typed as 'CoinSearchMatch'
+      const idsToFetch = matchedCoins.slice(0, 12).map((coin) => coin.id);
 
       // 3. Resolve historical market data metrics for matches
       const marketTelemetry = await coingeckoService.getMarketDataByIds(idsToFetch);
       setSearchCoinsResult(marketTelemetry);
-    } catch (err: any) {
+    } catch (err) { // FIX: Changed 'catch (err: any)' to standard safe 'catch (err)' (which defaults to type 'unknown')
       console.error("SEARCH RESOLUTION FAILURE: Falling back to local filters.", err);
       setSearchError("Dynamic API search failed. Reverting to local fallback list.");
       

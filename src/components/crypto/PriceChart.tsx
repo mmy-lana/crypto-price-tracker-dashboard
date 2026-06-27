@@ -1,4 +1,4 @@
-import React, { useState, useRef, useMemo } from 'react';
+import { useState, useRef, useMemo, type MouseEvent } from 'react';
 
 interface PriceChartProps {
   prices: [number, number][];
@@ -52,7 +52,7 @@ export default function PriceChart({ prices, days, onDaysChange }: PriceChartPro
   }
 
   // Process mouse alignment coordinate tracking
-  const handleMouseMove = (e: React.MouseEvent<SVGSVGElement, MouseEvent>) => {
+  const handleMouseMove = (e: MouseEvent<SVGSVGElement>) => {
     if (!svgRef.current) return;
     const rect = svgRef.current.getBoundingClientRect();
     const mouseX = e.clientX - rect.left;

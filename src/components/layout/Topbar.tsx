@@ -1,4 +1,3 @@
-import React from 'react';
 import { useApp } from '../../hooks/useApps';
 
 export default function Topbar() {

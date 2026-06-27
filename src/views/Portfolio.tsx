@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import { useState, useMemo, type SyntheticEvent } from 'react';
 import { useMarketData } from '../hooks/useCoinGecko';
 
 interface Transaction {
@@ -60,7 +60,7 @@ export default function Portfolio() {
     localStorage.setItem('nexus_ledger', JSON.stringify(updated));
   };
 
-  const addTransaction = (e: React.FormEvent) => {
+  const addTransaction = (e: SyntheticEvent) => {
     e.preventDefault();
     const qty = parseFloat(quantityInput);
     

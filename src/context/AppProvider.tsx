@@ -1,4 +1,4 @@
-import React, { useState, useEffect, type ReactNode } from 'react';
+import { useState, useEffect, type ReactNode } from 'react';
 import { registerStatusCallback } from '../services/coingecko';
 import { AppContext, type ActiveTab } from './AppContext';
 
